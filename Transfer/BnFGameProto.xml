@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coder name="BnFGameProto" version="1">
+	<defines>
+		<!--版本号-->
+		<define name="VERSION_MAJOR" value="0"/>
+		<define name="VERSION_MINOR" value="8"/>
+        <define name="VERSION_REVISION" value="6"/>
+		<!--SessionKey长度-->
+		<define name="SESSION_KEY_LEN" value="33"/>
+		<!--63+1-->
+		<define name="NAME_LEN" value="128"/>
+		<!--20+1-->
+		
+		<define name="PROTOCOL_KEY_LEN" value="33"/>
+		<define name="EQUIPMENT_ID_LEN" value="33"/>
+        <define name="EQUIPMENT_NAME_LEN" value="256"/>
+		<define name="EQUIPMENT_RES_LEN" value="33"/>
+		<define name="EQUIPMENT_GRADE_LEN" value="20"/>
+		<define name="EQUIPMENT_TYPE_LEN" value="50"/>
+		<define name="EQUIPMENT_PRICETYPE_LEN" value="20"/>
+        <define name="MAX_COMMAND_LEN" value="1000"/>
+        <define name="MAX_QUEST_RESULT_LEN" value="512"/>
+        <define name="MEDIUM_TEXT_LEN" value="1024"/>
+        <define name="MAX_TEXT_LEN" value="4096"/>
+	</defines>
+	<types>
+                <!-- 场景跳转 -->
+		<type name="CLI_GS_JUMP_SCENE_REQ">
+			<item name="Host" type="string" count="SESSION_KEY_LEN"/>
+			<item name="UserId" type="string" count="SESSION_KEY_LEN"/>
+			<item name="Port" type="int"/>
+		</type>
+		<type name="GS_CLI_JUMP_SCENE_ACK">
+			<item name="ErrCode" type="int"/>
+			<!-- id -->
+			<item name="Id" type="int"/>
+		</type>
+
+		<!-- 登陆REQ -->
+		<type name="CLI_GS_LOGIN_REQ">
+			<item name="SessionKey" type="string" count="SESSION_KEY_LEN"/>
+			<item name="UserId" type="string" count="SESSION_KEY_LEN"/>
+			<item name="TableId" type="int"/>
+			<item name="major" type="int"/>
+			<item name="minor" type="int"/>
+			<item name="revision" type="int"/>
+			<!--加密 -->
+			<item name="KEY" type="string" count="PROTOCOL_KEY_LEN"/>
+		</type>
+		<!-- 登陆ACK -->
+		<type name="GS_CLI_LOGIN_ACK">
+			<!--错误码 -->
+			<item name="ErrCode" type="int"/>
+			<!-- id -->
+			<item name="Id" type="int"/>
+		</type>
+		<!-- Ping REQ -->
+		<type name="CLI_GS_PING_REQ">
+			<!-- Any value is ok -->
+			<item name="Data" type="dword"/>
+		</type>
+		<!-- Ping ACK -->
+		<type name="GS_CLI_PING_ACK">
+			<!-- Get from CLI_GS_PING_REQ. -->
+			<item name="Data" type="dword"/>
+		</type>
+		<!-- 生物出现 -->
+		<type name="GS_CLI_CREATURE_APPEAR_NTF">
+			<!-- Monster? Player? Hot girl? -->
+			<item name="Type" type="dword"/>
+			<item name="Career" type="dword"/>
+			<!-- 1 for male, 2 for female. -->
+			<item name="Gender" type="byte"/>
+			<item name="Name" type="string" count="NAME_LEN"/>
+      		<!-- ObjId -->
+			<item name="Id" type="dword"/>
+			<!-- 如果是怪物,这里是monster id. -->
+			<item name="UserId" type="string" count="SESSION_KEY_LEN"/>
+			<!-- 宠物专用属性，主人的ObjId -->
+			<item name="MasterId" type="dword"/>
+			<!-- 当前宠物, 0表示没有当前宠物 -->
+			<item name="PetTypeId" type="dword" />
+			<!-- 当前宠物状态，0表示未召回，1表示召回 -->
+			<item name="PetStatus" type="byte" />
+			<!-- 当前坐骑类型Id, 0表示没有当前坐骑 -->
+			<item name="MountId" type="dword"/>
+			<!-- 当前坐骑状态，0表示下马，1表示上马 -->
+			<item name="MountStatus" type="byte" />
+			<!--x坐标 -->
+			<item name="X" type="float"/>
+			<!--y坐标 -->
+			<item name="Y" type="float"/>
+			<!--方向 -->
+			<item name="Angle" type="float"/>
+			<!--半径 -->
+			<item name="Radius" type="float"/>
+			<!--速度 -->
+			<item name="MovementSpeed" type="float"/>
+			<item name="Health" type="float"/>
+			<item name="Hp" type="float"/>
+			<item name="Mana" type="float"/>
+			<item name="Mp" type="float"/>
+			<item name="Fury" type="float"/>
+			<item name="FuryMax" type="float"/>
+			<item name="CampId" type="byte"/>
+			<item name="ForceId" type="dword"/>
+			<item name="Attackable" type="byte"/>
+			<item name="Talkable" type="byte"/>
+			<item name="MonsterClass" type="int"/>
+			<!--桌子id-->
+			<item name="TableId" type="int"/>
+			<item name="State" type="int"/>
+			<item name="Level" type="dword"/>
+			<item name="isBuilding" type="byte"/>
+            <item name="OwnerForceId" type="dword"/>
+        </type>
+		<!-- 生物消失 -->
+		<type name="GS_CLI_CREATURE_DISAPPEAR_NTF">
+			<item name="Id" type="dword"/>
+		</type>
+		<!-- 生物重生 -->
+		<type name="GS_CLI_CREATURE_ON_NTF">
+			<item name="Name" type="string" count="NAME_LEN"/>
+			<item name="Id" type="dword"/>
+		</type>
+		<!-- 生物死亡 -->
+		<type name="GS_CLI_CREATURE_OFF_NTF">
+			<item name="Id" type="dword"/>
+		</type>
+		<!-- 生物属性 -->
+		<type name="CLI_GS_CREATURE_PROPERTIES_REQ">
+			<item name="Id" type="dword"/>
+		</type>
+		<type name="GS_CLI_CREATURE_PROPERTIES_ACK">
+			<item name="Id" type="dword"/>
+			<item name="Name" type="string" count="NAME_LEN"/>
+			<item name="Exp" type="int"/>
+			<item name="PreExp" type="int"/>
+			<item name="NextExp" type="int"/>
+			<item name="Level" type="int"/>
+			<item name="Hp" type="float"/>
+			<item name="Mp" type="float"/>
+			<!-- new props -->
+			<item name="Strength" type="float"/>
+			<item name="Intelligence" type="float"/>
+			<item name="PhysicalDamage" type="float"/>
+			<item name="PhysicalDefence" type="float"/>
+			<item name="AbilityPower" type="float"/>
+			<item name="MagicResistance" type="float"/>
+			<item name="Health" type="float"/>
+			<item name="Mana" type="float"/>
+			<item name="HitValue" type="float"/>
+			<item name="DodgeValue" type="float"/>
+			<item name="CriticalStrikeDamage" type="float"/>
+			<item name="AntiCriticalValue" type="float"/>
+			<item name="SlayValue" type="float"/>
+			<item name="ArmorPenetration" type="float"/>
+			<item name="Armor" type="float"/>
+			<item name="DamageIncreased" type="float"/>
+			<item name="DamageReduction" type="float"/>
+			<item name="MovementSpeed" type="float"/>
+			<item name="AttackRange" type="float"/>
+			<item name="ManaRegeneration" type="float"/>
+			<item name="HealthRegeneration" type="float"/>
+			<item name="Tenacity" type="float"/>
+			<item name="Fury" type="float"/>
+			<item name="AttackSpeed" type="float"/>
+			<item name="FuryMax" type="float"/>
+			<item name="Bumper" type="dword"/>
+			<item name="VipBumper" type="dword"/>
+			<item name="BumperRate" type="float"/>
+			<item name="Gold" type="dword"/>
+			<item name="Attr1" type="dword"/>
+			<item name="Attr2" type="dword"/>
+			<item name="Attr3" type="dword"/>
+			<item name="Attr4" type="dword"/>
+			<item name="Attr5" type="dword"/>
+			<item name="Attr6" type="dword"/>
+			<item name="Attr7" type="dword"/>
+			<item name="Attr8" type="dword"/>
+			<item name="Attr9" type="dword"/>
+			<item name="Attr10" type="dword"/>
+            <item name="Attr11" type="dword"/>
+            <item name="Attr12" type="dword"/>
+            <item name="Attr13" type="dword"/>
+            <item name="Attr14" type="dword"/>
+            <item name="Attr15" type="dword"/>
+            <item name="Attr16" type="dword"/>
+            <item name="Attr17" type="dword"/>
+            <item name="Attr18" type="dword"/>
+            <item name="Attr19" type="dword"/>
+            <item name="Attr20" type="dword"/>
+			<item name="VipLevel" type="dword"/>
+			<item name="CustomizedStatus" type="dword"/>
+			<item name="Weapon" type="dword"/>
+            <item name="OwnerForceId" type="dword" />
+            <item name="UnionName" type="string" count="NAME_LEN"/>
+            <item name="GameTime" type="dword" />
+			<item name="RMB" type="dword"/>
+			<item name="GM" type="dword"/>
+			<!-- 当前宠物, 0表示没有当前宠物 -->
+			<item name="PetTypeId" type="dword" />
+			<!-- 当前宠物状态，0表示未召回，1表示召回 -->
+			<item name="PetStatus" type="byte" />
+			<!-- 当前坐骑类型Id, 0表示没有当前坐骑 -->
+			<item name="MountId" type="dword"/>
+			<!-- 当前坐骑状态，0表示下马，1表示上马 -->
+			<item name="MountStatus" type="byte" />
+		</type>
+		<!-- 非生物操作对象(如矿点，装备容器)出现 -->
+		<type name="GS_CLI_OPERATOR_APPEAR_NTF">
+	      <!-- id -->
+				<item name="Id" type="dword"/>
+	      <!-- 对象类型 -->
+	      <item name="Type" type="int"/>
+	      <!-- x坐标 -->
+	      <item name="X" type="float"/>
+	      <!-- y坐标 -->
+				<item name="Y" type="float"/>
+	      <!-- angle -->
+	      <item name="Angle" type="float"/>
+	      <!-- 子类型 -->
+	      <item name="SubType" type="int"/>
+	      <item name="Arg1" type="dword"/>
+	      <item name="Arg2" type="dword"/>
+	      <item name="Arg3" type="dword"/>
+	      <item name="Arg4" type="dword"/>
+	      <item name="Arg5" type="dword"/>
+	      <item name="Arg6" type="dword"/>
+		</type>
+		<!-- 非生物操作对象消失 -->
+		<type name="GS_CLI_OPERATOR_DISAPPEAR_NTF">
+			<!-- id -->
+			<item name="Id" type="dword"/>
+		</type>
+		<!-- 简单通知机制 -->
+		<type name="GS_CLI_SIMPLE_MESSAGE_NTF">
+			<item name="n" type="dword"/>
+		</type>
+		<!-- 技能掌握通知 -->
+		<type name="GS_CLI_SKILL_PROPERTIES_NTF">
+			<item name="Id" type="dword"/>
+			<item name="Cooldown" type="float"/>
+			<item name="Range" type="float"/>
+			<item name="Active" type="byte"/>
+		</type>
+		<!-- 命令 -->
+		<type name="CLI_GS_COMMAND_REQ">
+			<item name="ClientSideId" type="dword"/>
+			<item name="Command" type="string" count="MAX_COMMAND_LEN"/>
+		</type>
+		<type name="GS_CLI_COMMAND_ACK">
+			<item name="ClientSideId" type="dword"/>
+			<item name="Result" type="string" count="MAX_COMMAND_LEN"/>
+		</type>
+
+        <type name="CLI_GS_QUEST_RESULT_REQ">
+            <item name="Result" type="string" count="MAX_QUEST_RESULT_LEN"/>
+        </type>
+
+		<!-- 客户端发送的移动包 -->
+		<type name="CLI_GS_MOVE_REQ">
+			<!--运动状态 -->
+			<item name="State" type="int"/>
+			<!--x坐标 -->
+			<item name="X" type="int"/>
+			<!--y坐标 -->
+			<item name="Y" type="int"/>
+			<!--方向 -->
+			<item name="Angle" type="float"/>
+			<!--加密 -->
+			<item name="KEY" type="string" count="PROTOCOL_KEY_LEN"/>
+		</type>
+		<!-- 服务端发送的移动通知包,发给其他玩家的 -->
+		<type name="GS_CLI_MOVE_NTF">
+			<!-- id -->
+			<item name="Id" type="int"/>
+			<!--运动状态 -->
+			<item name="State" type="int"/>
+			<!--x坐标 -->
+			<item name="X" type="float"/>
+			<!--y坐标 -->
+			<item name="Y" type="float"/>
+			<!--方向 -->
+			<item name="Angle" type="float"/>
+		</type>
+		<!-- 服务端发送的移动修正包,发给该玩家的 -->
+		<type name="GS_CLI_MOVE_ACK">
+			<!--x坐标 -->
+			<item name="X" type="float"/>
+			<!--y坐标 -->
+			<item name="Y" type="float"/>
+			<!--方向 -->
+			<item name="Angle" type="float"/>
+		</type>
+		<type name="GS_CLI_FORCE_REPOSITIONED_NTF">
+			<item name="Id" type="dword"/>
+			<item name="X" type="float"/>
+			<item name="Y" type="float"/>
+			<item name="Angle" type="float"/>
+			<item name="Speed" type="float"/>
+			<item name="SkillId" type="dword"/>
+			<item name="ModifierId" type="dword"/>
+		</type>
+    <type name="GS_CLI_JUMP_NTF">
+      <item name="Id" type="dword"/>
+      <item name="X" type="float"/>
+      <item name="Y" type="float"/>
+      <item name="Angle" type="float"/>      
+    </type>
+		<!-- 服务端对象属性改变，分为整型类属性和浮点类属性 -->
+		<type name="GS_CLI_PROPERTYCHANGED_INT_NTF">
+			<!-- 对象id -->
+			<item name="Id" type="dword"/>
+			<!-- 属性id -->
+			<item name="PropertyId" type="int"/>
+			<!-- 属性值 -->
+			<item name="Value" type="int"/>
+			<!-- 造成属性改变的技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 技能施放者，如果是自己 -->
+			<item name="ModifierId" type="dword"/>
+			<!-- 自解释参数1 -->
+			<item name="Arg1" type="dword"/>
+		</type>
+		<type name="GS_CLI_PROPERTYCHANGED_UINT_NTF">
+			<!-- 对象id -->
+			<item name="Id" type="dword"/>
+			<!-- 属性id -->
+			<item name="PropertyId" type="int"/>
+			<!-- 属性值 -->
+			<item name="Value" type="dword"/>
+			<!-- 造成属性改变的技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 技能施放者，如果是自己 -->
+			<item name="ModifierId" type="dword"/>
+			<!-- 自解释参数1 -->
+			<item name="Arg1" type="dword"/>
+		</type>
+		<type name="GS_CLI_PROPERTYCHANGED_FLOAT_NTF">
+			<!-- 对象id -->
+			<item name="Id" type="dword"/>
+			<!-- 属性id -->
+			<item name="PropertyId" type="int"/>
+			<!-- 属性值 -->
+			<item name="Value" type="float"/>
+			<!-- 造成属性改变的技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 技能施放者，如果是自己 -->
+			<item name="ModifierId" type="dword"/>
+			<!-- 自解释参数1 -->
+			<item name="Arg1" type="dword"/>
+		</type>
+		<!-- 客户端发送的技能发动请求包 -->
+		<type name="CLI_GS_CASTING_REQ">
+			<!--宠物或者主人-->
+			<item name="Type" type="byte"/>
+			<!-- 技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 序列号 -->
+			<item name="SkillSeq" type="dword"/>
+			<!--目标id -->
+			<item name="TargetId" type="dword"/>
+			<!--x坐标 -->
+			<item name="X" type="int"/>
+			<!--y坐标 -->
+			<item name="Y" type="int"/>
+			<!--加密 -->
+			<item name="KEY" type="string" count="PROTOCOL_KEY_LEN"/>
+		</type>
+		<!-- 服务端发送的技能施放错误通知包 -->
+		<type name="GS_CLI_CASTING_ACK">
+			<!-- 技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 序列号 -->
+			<item name="SkillSeq" type="dword"/>
+			<!-- 错误码 -->
+			<item name="ErrorId" type="dword"/>
+		</type>
+		<!-- 服务端发送的技能发动通知包,发给其他玩家的 -->
+		<type name="GS_CLI_CASTING_NTF">
+			<item name="Json" type="string" count="MAX_TEXT_LEN"/>
+		</type>
+		<!-- 服务端发送的技能结束通知包,发给其他玩家的 -->
+		<type name="GS_CLI_CASTED_NTF">
+			<!-- 技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 序列号 -->
+			<item name="SkillSeq" type="dword"/>
+			<!-- 发射者id -->
+			<item name="PlayerId" type="dword"/>
+			<!--目标id -->
+			<item name="TargetId" type="dword"/>
+            <!-- 结果id, 释放结束?被打断? -->
+            <item name="ResultId" type="byte"/>
+        </type>
+		<!-- 服务端发送的技能CD剩余通知包,发给玩家自身 -->
+		<type name="GS_CLI_SKILL_COOLDOWN_NTF">
+			<!--宠物或者主人-->
+			<item name="Type" type="byte"/>
+			<!-- 技能id -->
+			<item name="SkillId" type="dword"/>
+			<!-- 剩余cd(毫秒) -->
+			<item name="Cooldown" type="dword"/>
+		</type>
+		<!-- 服务端发送的被动技能被触发 -->
+		<type name="GS_CLI_PASSIVE_SKILL_ACTIVE">
+			<!--宠物或者主人-->
+			<item name="Type" type="byte"/>
+			<!-- 技能id -->
+			<item name="SkillId" type="dword"/>
+		</type>
+		<!-- 添加buff -->
+		<type name="GS_CLI_ADD_BUFF_NTF">
+			<!-- buff主人 -->
+			<item name="PlayerId" type="dword"/>
+			<!-- buff id -->
+			<item name="BuffId" type="dword"/>
+			<!-- buff level -->
+			<item name="BuffLevel" type="int"/>
+			<!-- buff time(毫秒) -->
+			<item name="BuffTime" type="dword"/>
+			<!--层数-->
+			<item name="Count" type="int"/>
+      		<!--val-->
+			<item name="BuffValue" type="float"/>
+    </type>
+		<!-- 更新buff -->
+		<type name="GS_CLI_UPDATE_BUFF_NTF">
+			<!-- buff主人 -->
+			<item name="PlayerId" type="dword"/>
+			<!-- buff id -->
+			<item name="BuffId" type="dword"/>
+			<!-- buff level -->
+			<item name="BuffLevel" type="int"/>
+			<!-- buff time(毫秒) -->
+			<item name="BuffTime" type="dword"/>
+			<!--层数-->
+			<item name="Count" type="int"/>
+     		<!--val-->
+			<item name="BuffValue" type="float"/>
+    </type>
+		<!-- 移除buff -->
+		<type name="GS_CLI_DEL_BUFF_NTF">
+			<!-- buff主人 -->
+			<item name="PlayerId" type="dword"/>
+			<!-- buff id -->
+			<item name="BuffId" type="dword"/>
+		</type>
+		<!-- 得到装备 -->
+		<type name="GS_CLI_UPDATED_EQUIPMENT_NTF">
+			<item name="OwnerId" type="dword"/>
+			<item name="EquipmentId" type="string" count="EQUIPMENT_ID_LEN"/>
+			<item name="Position" type="byte"/>
+			<item name="ItemType" type="byte"/>
+			<item name="Count" type="int"/>
+			<item name="TemplateId" type="dword"/>
+			<item name="ExtraJson" type="string" count="MEDIUM_TEXT_LEN"/>
+		</type>
+		<!-- 装备列表,一般用于列举某用户全部装备 -->
+		<type name="CLI_GS_LIST_EQUIPMENT_REQ">
+			<item name="OwnerId" type="dword"/>
+			<item name="Bag" type="byte"/>
+			<item name="Equipment" type="byte"/>
+		</type>
+		<type name="GS_CLI_LIST_EQUIPMENT_ACK">
+			<item name="OwnerId" type="dword"/>
+			<item name="EquipmentId" type="string" count="EQUIPMENT_ID_LEN"/>
+			<item name="Position" type="byte"/>
+			<item name="ItemType" type="byte"/>
+			<item name="Count" type="int"/>
+			<item name="TemplateId" type="dword"/>
+			<item name="ExtraJson" type="string" count="MEDIUM_TEXT_LEN"/>
+		</type>
+		<type name="GS_CLI_LIST_EQUIPMENT_NTF">
+			<item name="OwnerId" type="dword"/>
+			<item name="EquipmentId" type="string" count="EQUIPMENT_ID_LEN"/>
+			<item name="Position" type="byte"/>
+			<item name="ItemType" type="byte"/>
+			<item name="Count" type="int"/>
+			<item name="TemplateId" type="dword"/>
+			<item name="ExtraJson" type="string" count="MEDIUM_TEXT_LEN"/>
+		</type>
+		<!-- 移动装备,回复协议描述装备的变化 -->
+		<!-- 丢弃装备 -->
+		<type name="CLI_GS_DROP_EQUIPMENT_REQ">
+			<item name="Position" type="byte"/>
+		</type>
+		<type name="GS_CLI_DROP_EQUIPMENT_ACK">
+			<item name="Position" type="byte"/>
+			<item name="ErrorId" type="dword"/>
+		</type>
+		<!-- 使用物品 -->
+		<type name="CLI_GS_USE_CONSUME_REQ">
+			<item name="Position" type="byte"/>
+			<item name="UseSeq" type="int"/>
+			<!--加密 -->
+			<item name="KEY" type="string" count="PROTOCOL_KEY_LEN"/>
+		</type>
+		<type name="GS_CLI_USE_CONSUME_ACK">
+			<item name="Position" type="byte"/>
+			<item name="UseSeq" type="int"/>
+			<item name="ErrorId" type="dword"/>
+		</type>
+		<!-- 移动装备 -->
+		<type name="CLI_GS_MOVE_EQUIPMENT_REQ">
+			<item name="SourceOwnerId" type="dword"/>
+			<!-- 如果是自己身上移动,那么id设为0,否则从id指定对象身上获取装备 -->
+			<item name="PositionFrom" type="byte"/>
+			<item name="PositionTo" type="byte"/>
+			<!--加密 -->
+			<item name="KEY" type="string" count="PROTOCOL_KEY_LEN"/>
+		</type>
+		<!-- 装备信息改变 -->
+		<type name="GS_CLI_MOVE_EQUIPMENT_ACK">
+			<item name="ErrorId" type="dword"/>
+			<item name="EquipmentId" type="string" count="EQUIPMENT_ID_LEN"/>
+			<item name="Position" type="byte"/>
+			<item name="ItemType" type="byte"/>
+			<item name="Count" type="int"/>
+			<item name="TemplateId" type="dword"/>
+			<item name="ExtraJson" type="string" count="MEDIUM_TEXT_LEN"/>
+		</type>
+		<!-- 装备信息改变 -->
+		<type name="GS_CLI_MOVE_EQUIPMENT_NTF">
+			<item name="OwnerId" type="dword"/>
+			<item name="EquipmentId" type="string" count="EQUIPMENT_ID_LEN"/>
+			<item name="Position" type="byte"/>
+			<item name="ItemType" type="byte"/>
+			<item name="Count" type="int"/>
+			<item name="TemplateId" type="dword"/>
+			<item name="ExtraJson" type="string" count="MEDIUM_TEXT_LEN"/>
+		</type>
+		<!-- 任务通知 -->
+		<type name="CLI_GS_QUERY_OPERATOR_REQ">
+			<item name="TargetId" type="dword"/>
+			<item name="Arg1" type="dword"/>
+		</type>
+		<!-- 队伍改变 -->
+		<type name="CLI_GS_CHANGE_TABLE_REQ">
+			<!-- -1 表示脱离当前table,进入暂时无人的新table. -2 表示锁定,  -3 表示解锁当前Table,队长才能执行. -->
+			<item name="TableId" type="int"/>
+		</type>
+		<type name="GS_CLI_CHANGE_TABLE_ACK">
+			<!-- 新table的名字,-1表示不改变任何状态 -->
+			<item name="TableId" type="int"/>
+		</type>
+		<type name="CLI_GS_REMOVE_QTE_BUFF_REQ">
+			<item name="BuffId" type="dword"/>
+		</type>
+		<type name="GS_CLI_REMOVE_QTE_BUFF_ACK">
+			<item name="BuffId" type="dword"/>
+		</type>
+		<!-- 角色锁定 -->
+		<type name="CLI_GS_LOCK_PLAYER_REQ">
+			<item name="Lock" type="byte"/>
+		</type>
+		<!-- 通知胜利队伍的id -->
+		<type name="GS_CLI_WINNER_NTF">
+			<item name="ForceId" type="dword"/>
+		</type>
+		<!-- 对话 -->
+		<type name="GS_CLI_SPEAK_NTF">
+			<item name="SpeakerId" type="dword"/>
+			<item name="Content" type="string" count="MAX_TEXT_LEN"/>
+		</type>
+		<type name="CLI_GS_TALK_REQ">
+			<item name="TargetId" type="dword"/>
+		</type>
+		<type name="GS_CLI_TALK_ACK">
+			<!-- 0即对话成功 -->
+			<item name="ResultId" type="int"/>
+		</type>
+	    <type name="GS_CLI_NOTIFY_ACK">
+			<item name="Json" type="string" count="MAX_TEXT_LEN"/>
+		</type>
+	</types>
+	
+	<messages>
+		<message name="MSG_LOGIN_REQ" id="2000" type="CLI_GS_LOGIN_REQ" dir="cs"/>
+		<message name="MSG_LOGIN_ACK" id="2001" type="GS_CLI_LOGIN_ACK" dir="sc"/>
+		<message name="MSG_PING_REQ" id="2003" type="CLI_GS_PING_REQ" dir="cs"/>
+		<message name="MSG_PING_ACK" id="2004" type="GS_CLI_PING_ACK" dir="sc"/>
+		<message name="MSG_MOVE_REQ" id="2010" type="CLI_GS_MOVE_REQ" dir="cs"/>
+		<message name="MSG_MOVE_NTF" id="2011" type="GS_CLI_MOVE_NTF" dir="sc"/>
+	    <message name="MSG_MOVE_ACK" id="2012" type="GS_CLI_MOVE_ACK" dir="sc"/>
+	    <message name="MSG_PROPERTYCHANGED_INT_NTF" id="2013" type="GS_CLI_PROPERTYCHANGED_INT_NTF" dir="sc"/>
+		<message name="MSG_PROPERTYCHANGED_UINT_NTF" id="2014" type="GS_CLI_PROPERTYCHANGED_UINT_NTF" dir="sc"/>
+		<message name="MSG_PROPERTYCHANGED_FLOAT_NTF" id="2015" type="GS_CLI_PROPERTYCHANGED_FLOAT_NTF" dir="sc"/>
+		<message name="MSG_FORCE_REPOSITIONED_NTF" id="2016" type="GS_CLI_FORCE_REPOSITIONED_NTF" dir="sc"/>
+		<message name="MSG_CREATURE_PROPERTIES_REQ" id="2017" type="CLI_GS_CREATURE_PROPERTIES_REQ" dir="cs"/>
+		<message name="MSG_CREATURE_PROPERTIES_ACK" id="2018" type="GS_CLI_CREATURE_PROPERTIES_ACK" dir="sc"/>
+	    <message name="MSG_JUMP_NTF" id="2019" type="GS_CLI_JUMP_NTF" dir="sc"/>
+	    <message name="MSG_SKILL_PROPERTIES_NTF" id="2020" type="GS_CLI_SKILL_PROPERTIES_NTF" dir="sc"/>
+		<message name="MSG_CASTING_REQ" id="2022" type="CLI_GS_CASTING_REQ" dir="cs"/>
+		<message name="MSG_CASTING_NTF" id="2023" type="GS_CLI_CASTING_NTF" dir="sc"/>
+		<message name="MSG_CASTED_NTF" id="2024" type="GS_CLI_CASTED_NTF" dir="sc"/>
+		<message name="MSG_CASTING_ACK" id="2025" type="GS_CLI_CASTING_ACK" dir="sc"/>
+		<message name="MSG_SKILL_COOLDOWN_NTF" id="2026" type="GS_CLI_SKILL_COOLDOWN_NTF" dir="sc"/>
+		<message name="MSG_PASSIVE_SKILL_ACTIVE" id="2027" type="GS_CLI_PASSIVE_SKILL_ACTIVE" dir="sc"/>
+		<message name="MSG_CREATURE_APPEAR_NTF" id="2030" type="GS_CLI_CREATURE_APPEAR_NTF" dir="sc"/>
+		<message name="MSG_CREATURE_DISAPPEAR_NTF" id="2031" type="GS_CLI_CREATURE_DISAPPEAR_NTF" dir="sc"/>
+		<message name="MSG_CREATURE_ON_NTF" id="2032" type="GS_CLI_CREATURE_ON_NTF" dir="sc"/>
+		<message name="MSG_CREATURE_OFF_NTF" id="2033" type="GS_CLI_CREATURE_OFF_NTF" dir="sc"/>
+		<message name="MSG_OPERATOR_APPEAR_NTF" id="2034" type="GS_CLI_OPERATOR_APPEAR_NTF" dir="sc"/>
+		<message name="MSG_OPERATOR_DISAPPEAR_NTF" id="2035" type="GS_CLI_OPERATOR_DISAPPEAR_NTF" dir="sc"/>
+		<message name="MSG_ADD_BUFF_NTF" id="2040" type="GS_CLI_ADD_BUFF_NTF" dir="sc"/>
+		<message name="MSG_UPDATE_BUFF_NTF" id="2041" type="GS_CLI_UPDATE_BUFF_NTF" dir="sc"/>
+		<message name="MSG_DEL_BUFF_NTF" id="2042" type="GS_CLI_DEL_BUFF_NTF" dir="sc"/>
+		<message name="MSG_MOVE_EQUIPMENT_REQ" id="2050" type="CLI_GS_MOVE_EQUIPMENT_REQ" dir="cs"/>
+		<message name="MSG_MOVE_EQUIPMENT_ACK" id="2060" type="GS_CLI_MOVE_EQUIPMENT_ACK" dir="sc"/>
+		<message name="MSG_MOVE_EQUIPMENT_NTF" id="2070" type="GS_CLI_MOVE_EQUIPMENT_NTF" dir="sc"/>
+		<message name="MSG_DROP_EQUIPMENT_REQ" id="2080" type="CLI_GS_DROP_EQUIPMENT_REQ" dir="cs"/>
+		<message name="MSG_DROP_EQUIPMENT_ACK" id="2081" type="GS_CLI_DROP_EQUIPMENT_ACK" dir="sc"/>
+		<message name="MSG_USE_CONSUME_REQ" id="2082" type="CLI_GS_USE_CONSUME_REQ" dir="cs"/>
+		<message name="MSG_USE_CONSUME_ACK" id="2083" type="GS_CLI_USE_CONSUME_ACK" dir="sc"/>
+		<message name="MSG_UPDATED_EQUIPMENT_NTF" id="2110" type="GS_CLI_UPDATED_EQUIPMENT_NTF" dir="sc"/>
+		<message name="MSG_LIST_EQUIPMENT_REQ" id="2120" type="CLI_GS_LIST_EQUIPMENT_REQ" dir="cs"/>
+		<message name="MSG_LIST_EQUIPMENT_ACK" id="2130" type="GS_CLI_LIST_EQUIPMENT_ACK" dir="sc"/>
+		<message name="MSG_LIST_EQUIPMENT_NTF" id="2140" type="GS_CLI_LIST_EQUIPMENT_NTF" dir="sc"/>
+		<message name="MSG_SIMPLE_MESSAGE_NTF" id="2150" type="GS_CLI_SIMPLE_MESSAGE_NTF" dir="sc"/>
+		<message name="MSG_COMMAND_REQ" id="3101" type="CLI_GS_COMMAND_REQ" dir="cs"/>
+		<message name="MSG_COMMAND_ACK" id="3102" type="GS_CLI_COMMAND_ACK" dir="sc"/>
+	    <message name="MSG_QUEST_RESULT_REQ" id="3103" type="CLI_GS_QUEST_RESULT_REQ" dir="cs"/>
+	    <message name="MSG_QUERY_OPERATOR_REQ" id="4120" type="CLI_GS_QUERY_OPERATOR_REQ" dir="cs"/>
+		<message name="MSG_CHANGE_TABLE_REQ" id="4130" type="CLI_GS_CHANGE_TABLE_REQ" dir="cs"/>
+		<message name="MSG_CHANGE_TABLE_ACK" id="4131" type="GS_CLI_CHANGE_TABLE_ACK" dir="sc"/>
+		<message name="MSG_REMOVE_QTE_BUFF_REQ" id="4132" type="CLI_GS_REMOVE_QTE_BUFF_REQ" dir="cs"/>
+		<message name="MSG_REMOVE_QTE_BUFF_ACK" id="4133" type="GS_CLI_REMOVE_QTE_BUFF_ACK" dir="sc"/>
+		<message name="MSG_LOCK_PLAYER_REQ" id="4200" type="CLI_GS_LOCK_PLAYER_REQ" dir="cs"/>
+		<message name="MSG_WINNER_NTF" id="4300" type="GS_CLI_WINNER_NTF" dir="sc"/>
+		<message name="MSG_SPEAK_NTF" id="4401" type="GS_CLI_SPEAK_NTF" dir="sc"/>
+		<message name="MSG_TALK_REQ" id="4402" type="CLI_GS_TALK_REQ" dir="cs"/>
+		<message name="MSG_TALK_ACK" id="4403" type="GS_CLI_TALK_ACK" dir="sc"/>
+	    <message name="MSG_NOTIFY_JSON" id="5000" type="GS_CLI_NOTIFY_ACK" dir="sc"/>
+
+		<message name="MSG_JUMP_SCENE_REQ" id="4466" type="CLI_GS_JUMP_SCENE_REQ" dir="cs"/>
+		<message name="MSG_JUMP_SCENE_ACK" id="4467" type="GS_CLI_JUMP_SCENE_ACK" dir="sc"/>
+  </messages>
+</coder>

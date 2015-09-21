@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="FakeTransfer">
+      <UniqueIdentifier>{cae530ee-ee97-49bf-904a-fcb6f68aaf74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RealTransfer">
+      <UniqueIdentifier>{1546ae05-eddd-48e1-a10b-0d8dd97f90b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Protocol">
+      <UniqueIdentifier>{a7d17764-a41d-421e-b7b7-eab449073ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{5b18196d-7bfb-41b1-aef1-e692deb01e4d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FakeNetWorkPipe.cpp">
+      <Filter>FakeTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="FakeTransferClient.cpp">
+      <Filter>FakeTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="FakeTransferServer.cpp">
+      <Filter>FakeTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="Transfer.cpp">
+      <Filter>FakeTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketParser.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="RealTransferServer.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionManager.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="TransferSocket.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="netdata.cpp">
+      <Filter>Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="TransferPCH.cpp">
+      <Filter>FakeTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="BoostSession.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="BoostSessionManager.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="BoostTransferServer.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedResouces.cpp" />
+    <ClCompile Include="TsdbLogger.cpp" />
+    <ClCompile Include="BoostTransferClient.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="RealTransferClient.cpp">
+      <Filter>RealTransfer</Filter>
+    </ClCompile>
+    <ClCompile Include="bnfgameproto.cpp">
+      <Filter>Protocol</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FakeNetWorkPipe.h">
+      <Filter>FakeTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeTransferClient.h">
+      <Filter>FakeTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeTransferServer.h">
+      <Filter>FakeTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="TransferPCH.h">
+      <Filter>FakeTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketParser.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="RealTransferServer.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionManager.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="TransferSocket.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="netdata.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolDefine.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDefine.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Transfer.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="BoostSession.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="BoostSessionManager.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="BoostTransferServer.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedResouces.h" />
+    <ClInclude Include="TsdbLogger.h" />
+    <ClInclude Include="BoostTransferClient.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="RealTransferClient.h">
+      <Filter>RealTransfer</Filter>
+    </ClInclude>
+    <ClInclude Include="bnfgameproto.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BnFGameProto.xml">
+      <Filter>Protocol</Filter>
+    </None>
+    <None Include="create_protocol.py">
+      <Filter>Protocol</Filter>
+    </None>
+    <None Include="ParseFile.bat">
+      <Filter>Protocol</Filter>
+    </None>
+    <None Include="Parser.bat">
+      <Filter>Protocol</Filter>
+    </None>
+    <None Include="SDParser.exe">
+      <Filter>Protocol</Filter>
+    </None>
+  </ItemGroup>
+</Project>

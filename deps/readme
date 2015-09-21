@@ -1,0 +1,5 @@
+libmemcached 编译说明
+	进入deps/libmemcached-0.50目录下,键入如下两条指令(编译安装memcached)
+	./configure --enable-static --prefix=`pwd`/../tmp
+	make install
+	然后把deps/tmp/lib/libmemcached.a copy到deps/lib目录下 即可
